@@ -2,7 +2,10 @@ j = 13;
 
 lambda = 10;
 Images = {};
-Exposures = zeros(j,1);
+% Exposures = zeros(j,1);
+Exposures = [0.03125 0.0625 0.125 0.25 0.5 1 2 4 8 16 32 64 128 256 512 1024];
+expo = 1 / Exposures;
+disp(expo);
 
 Red = {};
 Green = {};
@@ -89,5 +92,5 @@ HDR_img(1:imgRow, 1:imgCol, 3) = reshape(HDR_img_B, imgRow, imgCol);
 figure, imshow(HDR_img), title('HDR image');
 
 % Remove code before upload
-disp('draw response curves');
-drawImage(R_g, G_g, B_g);
+% disp('draw response curves');
+% drawImage(R_g, G_g, B_g);
