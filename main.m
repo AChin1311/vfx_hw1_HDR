@@ -52,11 +52,17 @@ rdm = randi([1, 768 * 1024], 1, 200);
 disp(rdm);
 
 % filling z matrix
-zimage = zeros(200, j, channel);
+Rimage = zeros(200, j);
+Gimage = zeros(200, j);
+Bimage = zeros(200, j);
 
 % weight function
 for i = 0:255
     w(i+1) = min(i, 255-i);
 end
 
-% [g, lE] = gsolve(Z, B, l, w)
+[R_g, R_lE] = gsolve(Rimage, ln_t, lambda, w);
+[G_g, G_lE] = gsolve(Gimage, ln_t, lambda, w);
+[B_g, B_lE] = gsolve(Bimage, ln_t, lambda, w);
+
+% Construct HDR radiance map
