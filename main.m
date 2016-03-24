@@ -1,12 +1,12 @@
 %j = 13;
 j = 16;
 
-lambda = 30;
+lambda = 10;
 Images = {};
 
 %Exposures = zeros(j,1);
 
-Exposures = [0.03125 0.0625 0.125 0.25 0.5 1 2 4 8 16 32 64 128 256 51gi2 1024];
+Exposures = [0.03125 0.0625 0.125 0.25 0.5 1 2 4 8 16 32 64 128 256 512 1024];
 disp(Exposures);
 for i = 1:16
     Exposures(i) = 1 / Exposures(i);
