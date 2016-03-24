@@ -1,4 +1,5 @@
-j = 13;
+%j = 13;
+j = 16;
 
 lambda = 10;
 Images = {};
@@ -10,13 +11,16 @@ Blue = {};
 for i = 1:j
 
     % Read a Image
-    ImagePath = sprintf('exposures/img%02d.jpg', i);
+    %ImagePath = sprintf('exposures/img%02d.jpg', i);
+    ImagePath = sprintf('Memorial_SourceImages/memorial%04d.png', 60+i);
+    
     disp(['Reading ',ImagePath]);
     img = imread(ImagePath);
     Images{i} = img; 
    	% Get the exposure time
-    info = imfinfo(ImagePath);
-    Exposures(i) = info.DigitalCamera.ExposureTime;
+    %info = imfinfo(ImagePath);
+    %Exposures(i) = info.DigitalCamera.ExposureTime;
+    
     % Seperate RGB channels
     red = img(:,:,1); % Red channel
     green = img(:,:,2); % Green channel
@@ -41,7 +45,18 @@ disp(imgRow);
 disp(imgCol);
 disp(channel);
 
-%disp(Exposures);
+
+fileID = fopen('Memorial_SourceImages/memorial.hdr_image_list.txt');
+tline = fgetl(fileID); % Read first line
+tline = fgetl(fileID); % Read Number of Images
+j = sscanf(tline, '%d');
+tline = fgetl(fileID); % Read File Name....
+% format: memorial0061.ppm 0.03125 8 0 0
+C = textscan(fileID,'%s %f %d %d %d');
+disp(C{2});
+fclose(fileID);
+Exposures = str2double(C{2});
+disp(Exposures);
 ln_t = log(Exposures);
 disp(ln_t);
 
