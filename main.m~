@@ -111,19 +111,16 @@ HDR_img_B = HDR_Map(Blue, B_g, B_lE, ln_t, w, j);
 HDR_img(1:imgRow, 1:imgCol, 3) = reshape(HDR_img_B, imgRow, imgCol);
 figure, imshow(HDR_img), title('HDR image');
 
-% Debug
-red = reshape(HDR_img_R, size(img, 1), size(img, 2));
-green = reshape(HDR_img_G, size(img, 1), size(img, 2));
-blue = reshape(HDR_img_B, size(img, 1), size(img, 2));
 a = zeros(size(img, 1), size(img, 2));
 just_red = cat(3, red, a, a);
 just_green = cat(3, a, green, a);
 just_blue = cat(3, a, a, blue);
+figure, imshow(img), title('Original image')
 figure, imshow(just_red), title('Red channel')
 figure, imshow(just_green), title('Green channel')
 figure, imshow(just_blue), title('Blue channel')
-
-% Remove code before upload
-disp('draw response curves')
-figure,drawImage(R_g, G_g, B_g);
+%Remove code before upload
+disp('draw response curves');
+disp(R_g);
+drawImage(R_g, G_g, B_g);
 
