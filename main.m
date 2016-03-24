@@ -12,9 +12,6 @@ for i = 1:16
     Exposures(i) = 1 / Exposures(i);
 end
 
-for i =1:j
-    Exposures(i) = 1/Exposures(i);
-end
 Red = {};
 Green = {};
 Blue = {};
@@ -107,12 +104,11 @@ end
 disp('Construct HDR map');
 
 HDR_img = zeros(imgRow, imgCol, 3);
-HDR_img_R = HDR_Map(Red, R_g, R_lE, ln_t, w, j);
+HDR_img_R = HDR_Map(Red, R_g, ln_t, w, j);
 HDR_img(1:imgRow, 1:imgCol, 1) = reshape(HDR_img_R, imgRow, imgCol);
-HDR_img_G = HDR_Map(Green, G_g, G_lE, ln_t, w, j);
+HDR_img_G = HDR_Map(Green, G_g, ln_t, w, j);
 HDR_img(1:imgRow, 1:imgCol, 2) = reshape(HDR_img_G, imgRow, imgCol);
-HDR_img_B = HDR_Map(Blue, B_g, B_lE, ln_t, w, j);
-disp(HDR_img_B(1:1000));
+HDR_img_B = HDR_Map(Blue, B_g, ln_t, w, j);
 HDR_img(1:imgRow, 1:imgCol, 3) = reshape(HDR_img_B, imgRow, imgCol);
 figure, imshow(HDR_img), title('HDR image');
 
@@ -120,6 +116,10 @@ figure, imshow(HDR_img), title('HDR image');
 red = reshape(HDR_img_R, size(img, 1), size(img, 2));
 green = reshape(HDR_img_G, size(img, 1), size(img, 2));
 blue = reshape(HDR_img_B, size(img, 1), size(img, 2));
+HDR_img = reshape(HDR_img, size(img, 1), size(img, 2),3);
+
+writeHDR(HDR_img);
+
 a = zeros(size(img, 1), size(img, 2));
 just_red = cat(3, red, a, a);
 just_green = cat(3, a, green, a);

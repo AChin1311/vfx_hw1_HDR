@@ -1,4 +1,4 @@
-function HDR_img = HDR_Map(images, g, lE, ln_t, w, P)
+function HDR_img = HDR_Map(images, g, ln_t, w, P)
     length = size(images{1});
     lE = zeros(length);
     
@@ -12,7 +12,6 @@ function HDR_img = HDR_Map(images, g, lE, ln_t, w, P)
         lE(pixel) = lE(pixel)/sum_w;
     end
     HDR_img = exp(lE);
-    
     index = find(isnan(HDR_img) | isinf(HDR_img));
     HDR_img(index) = 0;
 end
