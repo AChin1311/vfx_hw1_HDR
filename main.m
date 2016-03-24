@@ -1,16 +1,16 @@
 %j = 13;
-j = 16;
+j = 9;
 
 lambda = 10;
 Images = {};
 
-%Exposures = zeros(j,1);
+Exposures = zeros(j,1);
 
-Exposures = [0.03125 0.0625 0.125 0.25 0.5 1 2 4 8 16 32 64 128 256 512 1024];
-disp(Exposures);
-for i = 1:16
-    Exposures(i) = 1 / Exposures(i);
-end
+%Exposures = [0.03125 0.0625 0.125 0.25 0.5 1 2 4 8 16 32 64 128 256 512 1024];
+%disp(Exposures);
+%for i = 1:16
+%    Exposures(i) = 1 / Exposures(i);
+%end
 
 Red = {};
 Green = {};
@@ -18,16 +18,18 @@ Blue = {};
 for i = 1:j
 
     % Read a Image
-    %ImagePath = sprintf('exposures/img%02d.jpg', i);
-    ImagePath = sprintf('Memorial_SourceImages/memorial%04d.png', 60+i);
+    ImagePath = sprintf('exposures/img%02d.jpg', i);
+    %ImagePath = sprintf('Memorial_SourceImages/memorial%04d.png', 60+i);
+    %ImagePath = sprintf('pic/DSC040%d.JPG', 57 + i);
+
     
     disp(['Reading ',ImagePath]);
     img = imread(ImagePath);
     Images{i} = img; 
    	% Get the exposure time
-%     info = imfinfo(ImagePath);
-%     disp(info.DigitalCamera);
-%     Exposures(i) = info.DigitalCamera.ExposureTime;
+    info = imfinfo(ImagePath);
+    disp(info.DigitalCamera);
+    Exposures(i) = info.DigitalCamera.ExposureTime;
     
     % Seperate RGB channels
     red = img(:,:,1); % Red channel
@@ -95,6 +97,7 @@ end
 for i = 0:255
     w(i+1) = min(i, 255-i);
 end
+w = w/255;
 
 [R_g, R_lE] = gsolve(Rimage, ln_t, lambda, w);
 [G_g, G_lE] = gsolve(Gimage, ln_t, lambda, w);
