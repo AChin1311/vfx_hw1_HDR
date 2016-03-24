@@ -98,6 +98,7 @@ end
 
 % Construct HDR radiance map
 disp('Construct HDR map');
+
 HDR_img = zeros(imgRow, imgCol, 3);
 HDR_img_R = HDR_Map(Red, R_g, R_lE, ln_t, w, j);
 HDR_img(1:imgRow, 1:imgCol, 1) = reshape(HDR_img_R, imgRow, imgCol);
@@ -106,3 +107,7 @@ HDR_img(1:imgRow, 1:imgCol, 2) = reshape(HDR_img_G, imgRow, imgCol);
 HDR_img_B = HDR_Map(Blue, B_g, B_lE, ln_t, w, j);
 HDR_img(1:imgRow, 1:imgCol, 3) = reshape(HDR_img_B, imgRow, imgCol);
 figure, imshow(HDR_img), title('HDR image');
+
+% Remove code before upload
+disp('draw response curves');
+drawImage(R_g, G_g, B_g);
