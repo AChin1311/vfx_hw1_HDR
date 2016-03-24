@@ -48,7 +48,7 @@ ln_t = log(Exposures);
 
 
 % Select 200 pixels randomly
-rdm = randi([1, 768 * 1024], 1, 200);
+rdm = randi([1, imgRow * imgCol], 1, 200);
 disp(rdm);
 
 % filling z matrix
@@ -63,6 +63,10 @@ for number = 1:j
 		Bimage(pixel, number) = Blue{number}(rdm(pixel));
 	end
 end
+
+disp(Rimage);
+disp(Gimage);
+disp(Bimage);
 
 % weight function
 for i = 0:255
