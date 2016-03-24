@@ -1,6 +1,5 @@
 function HDR_img = HDR_Map(images, g, lE, ln_t, w, P)
     length = size(images{1});
-    %disp(images{1});
     lE = zeros(length);
     
     for pixel = 1:length
