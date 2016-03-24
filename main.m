@@ -56,6 +56,14 @@ Rimage = zeros(200, j);
 Gimage = zeros(200, j);
 Bimage = zeros(200, j);
 
+for number = 1:j
+	for pixel = 1:200
+		Rimage(pixel, number) = Red{number}(rdm(pixel));
+		Gimage(pixel, number) = Green{number}(rdm(pixel));
+		Bimage(pixel, number) = Blue{number}(rdm(pixel));
+	end
+end
+
 % weight function
 for i = 0:255
     w(i+1) = min(i, 255-i);
