@@ -1,21 +1,21 @@
 j = 13;
-
+lambda = 10;
 Images = {};
 Exposures = zeros(j,1);
 Y_Image = {};
 Red = {};
 Green = {};
 Blue = {};
-for i = 1:1
-    % Read images
+for i = 1:j
+    % Read a Image
     ImagePath = sprintf('exposures/img%02d.jpg', i);
-    disp(ImagePath);
+    disp(['Reading ',ImagePath]);
     img = imread(ImagePath);
     Images{i} = img; 
-   	% Get exposure time of the image
+   	% Get the exposure time
     info = imfinfo(ImagePath);
     Exposures(i) = info.DigitalCamera.ExposureTime;
-    
+    % Seperate RGB channels
     red = img(:,:,1); % Red channel
     green = img(:,:,2); % Green channel
     blue = img(:,:,3); % Blue channel
@@ -24,19 +24,23 @@ for i = 1:1
     Blue{i} = blue(:);
     
     % Debug
-    a = zeros(size(img, 1), size(img, 2));
-    just_red = cat(3, red, a, a);
-    just_green = cat(3, a, green, a);
-    just_blue = cat(3, a, a, blue);
-    figure, imshow(img), title('Original image')
-    figure, imshow(just_red), title('Red channel')
-    figure, imshow(just_green), title('Green channel')
-    figure, imshow(just_blue), title('Blue channel')
+%     a = zeros(size(img, 1), size(img, 2));
+%     just_red = cat(3, red, a, a);
+%     just_green = cat(3, a, green, a);
+%     just_blue = cat(3, a, a, blue);
+%     figure, imshow(img), title('Original image')
+%     figure, imshow(just_red), title('Red channel')
+%     figure, imshow(just_green), title('Green channel')
+%     figure, imshow(just_blue), title('Blue channel')
 end
 
 disp(Exposures);
 ln_t = log(Exposures);
 disp(ln_t);
 
+% weight function
+for i = 0:255
+    w(i+1) = min(i, 255-i);
+end
 
-%[g, lE] = gsolve(Z, B, l, w)
+%[g, lE] = gsolve(, ln_t, lambda, w)
