@@ -1,11 +1,16 @@
-j = 13;
+%j = 13;
+j = 16;
 
 lambda = 10;
 Images = {};
-% Exposures = zeros(j,1);
+
+%Exposures = zeros(j,1);
+
 Exposures = [0.03125 0.0625 0.125 0.25 0.5 1 2 4 8 16 32 64 128 256 512 1024];
-expo = 1 / Exposures;
-disp(expo);
+disp(Exposures);
+for i = 1:16
+    Exposures(i) = 1 / Exposures(i);
+end
 
 Red = {};
 Green = {};
@@ -13,13 +18,17 @@ Blue = {};
 for i = 1:j
 
     % Read a Image
-    ImagePath = sprintf('exposures/img%02d.jpg', i);
+    %ImagePath = sprintf('exposures/img%02d.jpg', i);
+    ImagePath = sprintf('Memorial_SourceImages/memorial%04d.png', 60+i);
+    
     disp(['Reading ',ImagePath]);
     img = imread(ImagePath);
     Images{i} = img; 
    	% Get the exposure time
-    info = imfinfo(ImagePath);
-    Exposures(i) = info.DigitalCamera.ExposureTime;
+%     info = imfinfo(ImagePath);
+%     disp(info.DigitalCamera);
+%     Exposures(i) = info.DigitalCamera.ExposureTime;
+    
     % Seperate RGB channels
     red = img(:,:,1); % Red channel
     green = img(:,:,2); % Green channel
@@ -44,14 +53,26 @@ disp(imgRow);
 disp(imgCol);
 disp(channel);
 
-%disp(Exposures);
+
+% fileID = fopen('Memorial_SourceImages/memorial.hdr_image_list.txt');
+% tline = fgetl(fileID); % Read first line
+% tline = fgetl(fileID); % Read Number of Images
+% j = sscanf(tline, '%d');
+% tline = fgetl(fileID); % Read File Name....
+% % format: memorial0061.ppm 0.03125 8 0 0
+% C = textscan(fileID,'%s %f %d %d %d');
+% disp(C{2});
+% fclose(fileID);
+% Exposures = str2double(C{2});
+
+disp(Exposures);
 ln_t = log(Exposures);
 disp(ln_t);
 
 
 % Select 200 pixels randomly
 rdm = randi([1, imgRow * imgCol], 1, 200);
-disp(rdm);
+%disp(rdm);
 
 % filling z matrix
 Rimage = zeros(200, j);
@@ -66,9 +87,9 @@ for number = 1:j
 	end
 end
 
-disp(Rimage);
-disp(Gimage);
-disp(Bimage);
+%disp(Rimage);
+%disp(Gimage);
+%disp(Bimage);
 
 % weight function
 for i = 0:255
@@ -88,9 +109,10 @@ HDR_img(1:imgRow, 1:imgCol, 1) = reshape(HDR_img_R, imgRow, imgCol);
 HDR_img_G = HDR_Map(Green, G_g, G_lE, ln_t, w, j);
 HDR_img(1:imgRow, 1:imgCol, 2) = reshape(HDR_img_G, imgRow, imgCol);
 HDR_img_B = HDR_Map(Blue, B_g, B_lE, ln_t, w, j);
+disp(HDR_img_B(1:1000));
 HDR_img(1:imgRow, 1:imgCol, 3) = reshape(HDR_img_B, imgRow, imgCol);
 figure, imshow(HDR_img), title('HDR image');
 
 % Remove code before upload
-% disp('draw response curves');
-% drawImage(R_g, G_g, B_g);
+disp('draw response curves');
+drawImage(R_g, G_g, B_g);
