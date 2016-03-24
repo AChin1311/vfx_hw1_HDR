@@ -44,7 +44,8 @@ disp(channel);
 
 disp(Exposures);
 ln_t = log(Exposures);
-%disp(ln_t);
+disp('>>>>>>>>>>>>>>>>>> display ln t >>>>>>>>>>>>>>>>>>');
+disp(ln_t);
 
 
 % Select 200 pixels randomly

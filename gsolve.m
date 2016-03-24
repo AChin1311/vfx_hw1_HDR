@@ -16,7 +16,7 @@ function [g, lE] = gsolve(Z, B, l, w)
 			wij = w(Z(i, j) + 1);
 			A(k,Z(i, j) + 1) = wij;
 			A(k, n + i) = -wij;
-			b(k, 1) = wij * B(i, j);
+			b(k, 1) = wij * B(j);
 			k = k + 1;
 		end 
 	end
