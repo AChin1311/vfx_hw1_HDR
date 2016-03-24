@@ -1,7 +1,7 @@
 %j = 13;
 j = 16;
 
-lambda = 10;
+lambda = 30;
 Images = {};
 %Exposures = zeros(j,1);
 
@@ -94,6 +94,7 @@ end
 for i = 0:255
     w(i+1) = min(i, 255-i);
 end
+w = w/255;
 
 [R_g, R_lE] = gsolve(Rimage, ln_t, lambda, w);
 [G_g, G_lE] = gsolve(Gimage, ln_t, lambda, w);
@@ -103,11 +104,11 @@ end
 disp('Construct HDR map');
 
 HDR_img = zeros(imgRow, imgCol, 3);
-HDR_img_R = HDR_Map(Red, R_g, R_lE, ln_t, w, j);
+HDR_img_R = HDR_Map(Red, R_g, ln_t, w, j);
 HDR_img(1:imgRow, 1:imgCol, 1) = reshape(HDR_img_R, imgRow, imgCol);
-HDR_img_G = HDR_Map(Green, G_g, G_lE, ln_t, w, j);
+HDR_img_G = HDR_Map(Green, G_g, ln_t, w, j);
 HDR_img(1:imgRow, 1:imgCol, 2) = reshape(HDR_img_G, imgRow, imgCol);
-HDR_img_B = HDR_Map(Blue, B_g, B_lE, ln_t, w, j);
+HDR_img_B = HDR_Map(Blue, B_g, ln_t, w, j);
 HDR_img(1:imgRow, 1:imgCol, 3) = reshape(HDR_img_B, imgRow, imgCol);
 figure, imshow(HDR_img), title('HDR image');
 
