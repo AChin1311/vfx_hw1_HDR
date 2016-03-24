@@ -42,9 +42,9 @@ disp(imgRow);
 disp(imgCol);
 disp(channel);
 
-disp(Exposures);
+%disp(Exposures);
 ln_t = log(Exposures);
-%disp(ln_t);
+disp(ln_t);
 
 
 % Select 200 pixels randomly
@@ -78,3 +78,4 @@ end
 [B_g, B_lE] = gsolve(Bimage, ln_t, lambda, w);
 
 % Construct HDR radiance map
+disp('Construct HDR map');
