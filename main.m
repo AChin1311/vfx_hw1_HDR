@@ -3,14 +3,15 @@ j = 16;
 
 lambda = 30;
 Images = {};
+
 %Exposures = zeros(j,1);
 
 Exposures = [0.03125 0.0625 0.125 0.25 0.5 1 2 4 8 16 32 64 128 256 512 1024];
 disp(Exposures);
-
-for i =1:j
-    Exposures(i) = 1/Exposures(i);
+for i = 1:16
+    Exposures(i) = 1 / Exposures(i);
 end
+
 Red = {};
 Green = {};
 Blue = {};
@@ -65,7 +66,7 @@ disp(channel);
 % Exposures = str2double(C{2});
 
 disp(Exposures);
-ln_t = log2(Exposures);
+ln_t = log(Exposures);
 disp(ln_t);
 
 
@@ -116,6 +117,10 @@ figure, imshow(HDR_img), title('HDR image');
 red = reshape(HDR_img_R, size(img, 1), size(img, 2));
 green = reshape(HDR_img_G, size(img, 1), size(img, 2));
 blue = reshape(HDR_img_B, size(img, 1), size(img, 2));
+HDR_img = reshape(HDR_img, size(img, 1), size(img, 2),3);
+
+writeHDR(HDR_img);
+
 a = zeros(size(img, 1), size(img, 2));
 just_red = cat(3, red, a, a);
 just_green = cat(3, a, green, a);

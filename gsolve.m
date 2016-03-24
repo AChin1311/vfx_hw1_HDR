@@ -7,7 +7,7 @@ function [g, lE] = gsolve(Z, B, l, w)
 
 	n = 256;
 	A = zeros(size(Z, 1) * size(Z, 2) + n + 1, n + size(Z, 1));
-	b = zeros(size(A,1),1);
+	b = zeros(size(A, 1),1);
 
 	% Include the data-fitting equations
 	k = 1; 
@@ -38,6 +38,7 @@ function [g, lE] = gsolve(Z, B, l, w)
 
 	% Solve g and lE
 	g = x(1 : n);
+    disp(g);
 	lE = x(n + 1 : size(x, 1));
 
 end

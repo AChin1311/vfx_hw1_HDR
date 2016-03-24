@@ -12,7 +12,10 @@ function HDR_img = HDR_Map(images, g, ln_t, w, P)
         lE(pixel) = lE(pixel)/sum_w;
     end
     HDR_img = exp(lE);
+<<<<<<< HEAD
     disp(HDR_img);
+=======
+>>>>>>> 64fae06101e0c0c60f9bccafbac992b899ddcbb4
     index = find(isnan(HDR_img) | isinf(HDR_img));
     HDR_img(index) = 0;
 end
