@@ -79,3 +79,8 @@ end
 
 % Construct HDR radiance map
 disp('Construct HDR map');
+
+% Remove code before upload
+disp('draw response curves');
+drawImage(R_g, G_g, B_g);
+
