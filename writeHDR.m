@@ -1,6 +1,6 @@
 function writeHDR(image)
 	fd = fopen('img.hdr', 'w');
-	[row, col, rgb] = size(image);
+	[row, col, channel] = size(image);
 
 	fprintf(fd,'#?RADIANCE\n');
     fprintf(fd,'FORMAT=32-bit_rle_rgbe\n');
