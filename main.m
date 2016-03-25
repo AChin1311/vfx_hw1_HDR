@@ -28,7 +28,7 @@ for i = 1:j
     Images{i} = img; 
    	% Get the exposure time
     info = imfinfo(ImagePath);
-    disp(info.DigitalCamera);
+    %disp(info.DigitalCamera);
     Exposures(i) = info.DigitalCamera.ExposureTime;
     
     % Seperate RGB channels
@@ -51,9 +51,9 @@ for i = 1:j
 end
 
 [imgRow, imgCol, channel]= size(Images{1});
-disp(imgRow);
-disp(imgCol);
-disp(channel);
+% disp(imgRow);
+% disp(imgCol);
+% disp(channel);
 
 
 % fileID = fopen('Memorial_SourceImages/memorial.hdr_image_list.txt');
@@ -67,9 +67,9 @@ disp(channel);
 % fclose(fileID);
 % Exposures = str2double(C{2});
 
-disp(Exposures);
+% disp(Exposures);
 ln_t = log(Exposures);
-disp(ln_t);
+% disp(ln_t);
 
 
 % Select 200 pixels randomly
