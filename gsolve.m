@@ -25,7 +25,7 @@ function [g, lE] = gsolve(Z, B, l, w)
 	for i = 1 : size(Z, 1)
 		for j = 1 : size(Z, 2)
 			wij = w(Z(i, j) + 1);
-			A(k,Z(i, j) + 1) = wij;
+			A(k, Z(i, j) + 1) = wij;
 			A(k, n + i) = -wij;
 			b(k, 1) = wij * B(j);
 			k = k + 1;
@@ -49,7 +49,6 @@ function [g, lE] = gsolve(Z, B, l, w)
 
 	% Solve g and lE
 	g = x(1 : n);
-    disp(g);
 	lE = x(n + 1 : size(x, 1));
 
 end
