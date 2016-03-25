@@ -19,6 +19,7 @@ for i = 1:j
 end
 ln_t = log(Exposures);
 
+% Select 200 pixels randomly
 disp('Select sample pixels');
 rdm = randi([1, imgRow * imgCol], 1, samples);
 simage = {};
