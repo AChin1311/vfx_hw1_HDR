@@ -11,7 +11,7 @@ function drawImage(R_g, G_g, B_g)
 		title('Green Response Curve');
 		xlabel('pixel value Z');
 		ylabel('log exposures X');
-		saveas(gResImg, 'images/response_curve/g_response_curve.png');
+		saveas(gResImg, 'images=/response_curve/g_response_curve.png');
 
 		bResImg = plot(B_g, 'b', 'LineWidth', 1);
 		title('Blue Response Curve');

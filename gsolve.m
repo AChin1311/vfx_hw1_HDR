@@ -38,7 +38,6 @@ function [g, lE] = gsolve(Z, B, l, w)
 
 	% Solve g and lE
 	g = x(1 : n);
-    disp(g);
 	lE = x(n + 1 : size(x, 1));
 
 end

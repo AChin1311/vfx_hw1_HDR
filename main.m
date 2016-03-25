@@ -1,135 +1,54 @@
-%j = 13;
-j = 16;
-
+j = 13;
 lambda = 10;
+samples = 200;
+
 Images = {};
-
-%Exposures = zeros(j,1);
-
-Exposures = [0.03125 0.0625 0.125 0.25 0.5 1 2 4 8 16 32 64 128 256 512 1024];
-disp(Exposures);
-for i = 1:16
-    Exposures(i) = 1 / Exposures(i);
-end
-
-Red = {};
-Green = {};
-Blue = {};
+Exposures = zeros(j);
 for i = 1:j
-
-    % Read a Image
-    %ImagePath = sprintf('exposures/img%02d.jpg', i);
-    ImagePath = sprintf('Memorial_SourceImages/memorial%04d.png', 60+i);
-    
+    ImagePath = sprintf('exposures/img%02d.jpg', i);
     disp(['Reading ',ImagePath]);
     img = imread(ImagePath);
-    Images{i} = img; 
-   	% Get the exposure time
-%     info = imfinfo(ImagePath);
-%     disp(info.DigitalCamera);
-%     Exposures(i) = info.DigitalCamera.ExposureTime;
+    if i == 1
+       [imgRow, imgCol, channel]= size(img);
+    end
+    Images{i} = reshape(img, imgRow*imgCol, 3);
     
-    % Seperate RGB channels
-    red = img(:,:,1); % Red channel
-    green = img(:,:,2); % Green channel
-    blue = img(:,:,3); % Blue channel
-    Red{i} = red(:);
-    Green{i} = green(:);
-    Blue{i} = blue(:);
-    
-    % Debug
-%     a = zeros(size(img, 1), size(img, 2));
-%     just_red = cat(3, red, a, a);
-%     just_green = cat(3, a, green, a);
-%     just_blue = cat(3, a, a, blue);
-%     figure, imshow(img), title('Original image')
-%     figure, imshow(just_red), title('Red channel')
-%     figure, imshow(just_green), title('Green channel')
-%     figure, imshow(just_blue), title('Blue channel')
+    % Get the exposure time
+    info = imfinfo(ImagePath);
+    Exposures(i) = info.DigitalCamera.ExposureTime;
 end
-
-[imgRow, imgCol, channel]= size(Images{1});
-disp(imgRow);
-disp(imgCol);
-disp(channel);
-
-
-% fileID = fopen('Memorial_SourceImages/memorial.hdr_image_list.txt');
-% tline = fgetl(fileID); % Read first line
-% tline = fgetl(fileID); % Read Number of Images
-% j = sscanf(tline, '%d');
-% tline = fgetl(fileID); % Read File Name....
-% % format: memorial0061.ppm 0.03125 8 0 0
-% C = textscan(fileID,'%s %f %d %d %d');
-% disp(C{2});
-% fclose(fileID);
-% Exposures = str2double(C{2});
-
-disp(Exposures);
 ln_t = log(Exposures);
-disp(ln_t);
 
-
-% Select 200 pixels randomly
-rdm = randi([1, imgRow * imgCol], 1, 200);
-%disp(rdm);
-
-% filling z matrix
-Rimage = zeros(200, j);
-Gimage = zeros(200, j);
-Bimage = zeros(200, j);
-
+disp('Select sample pixels');
+rdm = randi([1, imgRow * imgCol], 1, samples);
+simage = {};
 for number = 1:j
-	for pixel = 1:200
-		Rimage(pixel, number) = Red{number}(rdm(pixel));
-		Gimage(pixel, number) = Green{number}(rdm(pixel));
-		Bimage(pixel, number) = Blue{number}(rdm(pixel));
-	end
+    for pixel = 1:samples
+        for color = 1:channel
+            simage{color}(pixel, number) = Images{number}(rdm(pixel), color);
+        end
+    end
 end
 
-%disp(Rimage);
-%disp(Gimage);
-%disp(Bimage);
+disp('solve g function');
+g = {};
+lE = {};
+for color = 1:channel
+    
+    [g{color}, lE{color}] = gsolve(simage{color}, ln_t, lambda, w);
+end
 
-% weight function
 for i = 0:255
     w(i+1) = min(i, 255-i);
 end
-w = w/255;
 
-[R_g, R_lE] = gsolve(Rimage, ln_t, lambda, w);
-[G_g, G_lE] = gsolve(Gimage, ln_t, lambda, w);
-[B_g, B_lE] = gsolve(Bimage, ln_t, lambda, w);
-
-% Construct HDR radiance map
-disp('Construct HDR map');
-
-HDR_img = zeros(imgRow, imgCol, 3);
-HDR_img_R = HDR_Map(Red, R_g, ln_t, w, j);
-HDR_img(1:imgRow, 1:imgCol, 1) = reshape(HDR_img_R, imgRow, imgCol);
-HDR_img_G = HDR_Map(Green, G_g, ln_t, w, j);
-HDR_img(1:imgRow, 1:imgCol, 2) = reshape(HDR_img_G, imgRow, imgCol);
-HDR_img_B = HDR_Map(Blue, B_g, ln_t, w, j);
-HDR_img(1:imgRow, 1:imgCol, 3) = reshape(HDR_img_B, imgRow, imgCol);
+disp('Construct HDR radiance map');
+HDR_img = reshape(HDR_Map(Images, g, ln_t, w, j), imgRow, imgCol, 3);
 figure, imshow(HDR_img), title('HDR image');
 
-% Debug
-red = reshape(HDR_img_R, size(img, 1), size(img, 2));
-green = reshape(HDR_img_G, size(img, 1), size(img, 2));
-blue = reshape(HDR_img_B, size(img, 1), size(img, 2));
-HDR_img = reshape(HDR_img, size(img, 1), size(img, 2),3);
-
+disp('Write HDR image to file');
 writeHDR(HDR_img);
 
-a = zeros(size(img, 1), size(img, 2));
-just_red = cat(3, red, a, a);
-just_green = cat(3, a, green, a);
-just_blue = cat(3, a, a, blue);
-figure, imshow(just_red), title('Red channel')
-figure, imshow(just_green), title('Green channel')
-figure, imshow(just_blue), title('Blue channel')
-
 % Remove code before upload
-disp('draw response curves')
-figure,drawImage(R_g, G_g, B_g);
-
+disp('Draw response curves')
+%figure,drawImage(R_g, G_g, B_g);
