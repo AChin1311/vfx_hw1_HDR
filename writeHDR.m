@@ -1,4 +1,5 @@
 function writeHDR(Image)
+
 	fd = fopen('img.hdr', 'w');
 	[row, col, channel] = size(Image);
 
@@ -14,16 +15,12 @@ function writeHDR(Image)
     % Reshape of data
     data = zeros(row * col * 4, 1);
 
-    for i = 1 : 4
-        RGBEbuffer(:, :, i) = fliplr(RGBEbuffer(:, :, i));   
-    end
-    RGBEbuffer = imrotate(RGBEbuffer, 90, 'nearest');
-
     for i = 1 : 4;
 		C = i : 4 : (row * col * 4);
-		data(C) = reshape(RGBEbuffer(:,:,i),row * col, 1);
+		data(C) = reshape(RGBEbuffer(:, :, i)', row * col, 1);
     end
 
+    % Write image data to file
     fwrite(fd, data,'uint8');
     fclose(fd);
 
