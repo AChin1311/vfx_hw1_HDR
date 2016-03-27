@@ -1,6 +1,6 @@
-function writeHDR(Image)
+function writeHDR(Image, filename)
 
-	fd = fopen('img.hdr', 'w');
+	fd = fopen([filename, '.hdr'], 'w');
 	[row, col, channel] = size(Image);
 
     % Write necessary information to file

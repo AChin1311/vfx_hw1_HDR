@@ -33,22 +33,27 @@ end
 disp('solve g function');
 g = {};
 lE = {};
+for i = 0:255
+    w(i+1) = min(i, 255-i);
+end
+
+
 for color = 1:channel
     
     [g{color}, lE{color}] = gsolve(simage{color}, ln_t, lambda, w);
 end
 
-for i = 0:255
-    w(i+1) = min(i, 255-i);
-end
-
 disp('Construct HDR radiance map');
 HDR_img = reshape(HDR_Map(Images, g, ln_t, w, j), imgRow, imgCol, 3);
 figure, imshow(HDR_img), title('HDR image');
-
 disp('Write HDR image to file');
-writeHDR(HDR_img);
+writeHDR(HDR_img, 'img');
 
+disp('Tone mapping')
+tone_img = ToneMapping(HDR_img);
+writeHDR(tone_img, 'tone_mapped_img');
+imwrite(tone_img, 'tone_mapped.png');
 % Remove code before upload
-disp('Draw response curves')
+%disp('Draw response curves')
 %figure,drawImage(R_g, G_g, B_g);
+
