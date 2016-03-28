@@ -1,22 +1,23 @@
-%j = 13;
+j = 13;
 lambda = 10;
 samples = 200;
 
 Images = {};
-%Exposures = zeros(j);
 
-files = dir('exposures/*.jpg');
+directory = 'exposures/';
+files = dir([directory, '*.jpg']);
 j = length(files);
 
-img_info = imfinfo(['exposures/', files(1).name]);
+img_info = imfinfo([directory, files(1).name]);
 imgRow = img_info.Height;
 imgCol = img_info.Width;
 img_array = zeros(imgRow, imgCol, 3, j);
 gimg_array = zeros(imgRow, imgCol, j);
 Exposures = zeros(j);
 
+disp('Get images from directory');
 for i = 1 : j
-	ImagePath = ['exposures/', files(i).name];
+	ImagePath = [directory, files(i).name];
 	img = imread(ImagePath);
 	img_array(:, :, :, i) = img;
 	gimg_array(:, :, i) = rgb2gray(img);
@@ -24,6 +25,7 @@ for i = 1 : j
 	Exposures(i) = info.DigitalCamera.ExposureTime;
 end
 
+disp('Image Alignment');
 for i = 1 : j - 1
 	shift_rtn = zeros(2, 1);
 	shift = zeros(2, 1);
@@ -34,17 +36,7 @@ for i = 1 : j - 1
 end
 
 for i = 1:j
-    %ImagePath = sprintf('exposures/img%02d.jpg', i);
-    %disp(['Reading ',ImagePath]);
-    %img = imread(ImagePath);
-    %if i == 1
-    %   [imgRow, imgCol, channel]= size(img);
-    %end
     Images{i} = reshape(img_array(:, :, :, i), imgRow*imgCol, 3);
-    
-    % Get the exposure time
-    %info = imfinfo(ImagePath);
-    %Exposures(i) = info.DigitalCamera.ExposureTime;
 end
 ln_t = log(Exposures);
 
@@ -90,4 +82,3 @@ imwrite(tone_img, 'TM_local.png');
 % Remove code before upload
 %disp('Draw response curves')
 %figure,drawImage(R_g, G_g, B_g);
-
