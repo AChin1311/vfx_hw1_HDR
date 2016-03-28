@@ -49,10 +49,15 @@ figure, imshow(HDR_img), title('HDR image');
 disp('Write HDR image to file');
 writeHDR(HDR_img, 'img');
 
-disp('Tone mapping')
-tone_img = ToneMapping(HDR_img);
-writeHDR(tone_img, 'tone_mapped_img');
-imwrite(tone_img, 'tone_mapped.png');
+tone_img = ToneMapping('global', HDR_img);
+disp('write to file');
+writeHDR(tone_img, 'TM_global_img');
+imwrite(tone_img, 'TM_global.png');
+
+tone_img = ToneMapping('local', HDR_img);
+disp('write to file');
+writeHDR(tone_img, 'TM_local_img');
+imwrite(tone_img, 'TM_local.png');
 % Remove code before upload
 %disp('Draw response curves')
 %figure,drawImage(R_g, G_g, B_g);
