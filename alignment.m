@@ -27,8 +27,10 @@ function shift = alignment(img1, img2, shift_bits, shift)
 
     tb1(img1 > threshold1) = 1;
     tb2(img2 > threshold2) = 1;
-    eb1(img1 < threshold1 - 4 || img1 > threshold1 + 4) = 1;
-    eb2(img2 < threshold2 - 4 || img2 > threshold2 + 4) = 1;
+    eb1(img1 < threshold1 - 1) = 1;
+    eb1(img1 > threshold1 + 1) = 1;
+    eb2(img2 < threshold2 - 1) = 1;
+    eb2(img2 > threshold2 + 1) = 1;
 
     % Alignment
     min_err = row1 * col1;
@@ -41,11 +43,12 @@ function shift = alignment(img1, img2, shift_bits, shift)
     		shift_eb2 = imtranslate(eb2, [shift_x, shift_y], 'FillValues', 0);
 
     		diff_bits = and(and(xor(tb1, shift_tb2), eb1), shift_eb2);
-    		err = sum(diff_b(:));
+    		err = sum(diff_bits(:));
 
     		if err < min_err
     			shift = [shift_x, shift_y];
     			min_err = err;
+            end
     	end
     end
 
