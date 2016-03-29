@@ -1,10 +1,9 @@
-j = 13;
 lambda = 10;
 samples = 200;
 
 Images = {};
 
-directory = 'exposures/';
+directory = 'pic/';
 files = dir([directory, '*.jpg']);
 j = length(files);
 
@@ -60,7 +59,6 @@ end
 
 
 for color = 1:channel
-    
     [g{color}, lE{color}] = gsolve(simage{color}, ln_t, lambda, w);
 end
 
@@ -71,14 +69,14 @@ disp('Write HDR image to file');
 writeHDR(HDR_img, 'img');
 
 tone_img = ToneMapping('global', HDR_img);
-disp('write to file');
 writeHDR(tone_img, 'TM_global_img');
 imwrite(tone_img, 'TM_global.png');
 
 tone_img = ToneMapping('local', HDR_img);
-disp('write to file');
 writeHDR(tone_img, 'TM_local_img');
 imwrite(tone_img, 'TM_local.png');
 % Remove code before upload
 %disp('Draw response curves')
+
+disp('done');
 %figure,drawImage(R_g, G_g, B_g);

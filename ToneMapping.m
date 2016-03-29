@@ -16,7 +16,7 @@ function tone_map_img = ToneMapping(type, img)
             disp('local tone mapping');
             phi = 8.0;
             epsilon = 0.05;
-            alpha_ = 0.3;
+            alpha = 0.3;
             Lblur_s = zeros(size(Lw,1), size(Lw,2), 9);
             for i = 0:8
                 s = 1.6^i;
@@ -29,7 +29,7 @@ function tone_map_img = ToneMapping(type, img)
                     smax = 1;
                     for k = 0:7
                         s = 1.6^k;
-                        denominator = (((2^phi)*alpha_)/s*s) + Lblur_s(i,j,k+1);
+                        denominator = (((2^phi)*alpha)/s*s) + Lblur_s(i,j,k+1);
                         if denominator == 0
                             Vsij = 0;
                         else
@@ -52,5 +52,4 @@ function tone_map_img = ToneMapping(type, img)
         Cw = img(:,:,channel) ./ Lw;
         tone_map_img(:,:,channel) = Cw .* Ld;
     end
-    imwrite(tone_map_img, 'tone_mapped_global.png');
 end
